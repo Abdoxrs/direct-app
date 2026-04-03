@@ -59,7 +59,7 @@ export class StatsService {
     return Array.from(map.entries()).map(([date, count]) => ({ date, count }));
   }
 
-  private topItems(clicks: Click[], field: keyof Click): { [key: string]: number }[] {
+  private topItems(clicks: Click[], field: keyof Click): any[] {
     const map = new Map<string, number>();
     clicks.forEach(click => {
       const value = click[field] as string;

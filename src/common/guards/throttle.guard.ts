@@ -1,4 +1,4 @@
-import { Injectable, CanActivate, ExecutionContext, TooManyRequestsException } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, HttpException } from '@nestjs/common';
 import { CacheService } from '../../cache/cache.service';
 import { ConfigService } from '@nestjs/config';
 
@@ -23,7 +23,7 @@ export class ThrottleGuard implements CanActivate {
       await this.cacheService.expire(key, ttl);
     }
     if (count > limit) {
-      throw new TooManyRequestsException('Too many requests');
+      throw new HttpException('Too many requests', 429);
     }
     return true;
   }

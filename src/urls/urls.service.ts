@@ -47,7 +47,7 @@ export class UrlsService {
       shortCode,
       originalUrl,
       userId,
-      expiresAt: expiresAt ? new Date(expiresAt) : null,
+      expiresAt: expiresAt ? new Date(expiresAt) : undefined,
     });
     const savedUrl = await this.urlRepository.save(url);
 

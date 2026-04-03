@@ -3,6 +3,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagg
 import { UrlsService } from './urls.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateUrlDto } from './dto/create-url.dto';
+import { ThrottleGuard } from '../common/guards/throttle.guard';
 
 @ApiTags('urls')
 @Controller('urls')
@@ -10,7 +11,7 @@ export class UrlsController {
   constructor(private readonly urlsService: UrlsService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, ThrottleGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Shorten a URL' })
   @ApiResponse({ status: 201, description: 'URL shortened successfully' })
@@ -37,19 +38,5 @@ export class UrlsController {
   async deleteUrl(@Param('id') id: string, @Req() req) {
     const userId = req.user.userId;
     await this.urlsService.deleteUrl(id, userId);
-  }
-}
-
-@Controller()
-export class RedirectController {
-  constructor(private readonly urlsService: UrlsService) {}
-
-  @Get(':code')
-  @ApiOperation({ summary: 'Redirect to original URL' })
-  @ApiResponse({ status: 301, description: 'Redirect to original URL' })
-  @Redirect()
-  async redirect(@Param('code') code: string, @Req() req) {
-    const originalUrl = await this.urlsService.redirect(code, req);
-    return { url: originalUrl, statusCode: 301 };
   }
 }

@@ -9,11 +9,11 @@ export class CacheService implements OnModuleInit, OnModuleDestroy {
   constructor(private configService: ConfigService) {}
 
   async onModuleInit() {
-    this.client = createClient({
-      host: this.configService.get('REDIS_HOST'),
-      port: this.configService.get('REDIS_PORT'),
-      password: this.configService.get('REDIS_PASSWORD'),
-    });
+    const host = this.configService.get('REDIS_HOST');
+    const port = this.configService.get('REDIS_PORT');
+    const password = this.configService.get('REDIS_PASSWORD');
+    const url = password ? `redis://:${password}@${host}:${port}` : `redis://${host}:${port}`;
+    this.client = createClient({ url });
     await this.client.connect();
   }
 

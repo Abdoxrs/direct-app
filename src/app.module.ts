@@ -8,6 +8,7 @@ import { UrlsModule } from './urls/urls.module';
 import { ClicksModule } from './clicks/clicks.module';
 import { StatsModule } from './stats/stats.module';
 import { CacheModule } from './cache/cache.module';
+import { RedirectController } from './redirect.controller';
 
 @Module({
   imports: [
@@ -35,7 +36,7 @@ import { CacheModule } from './cache/cache.module';
     StatsModule,
     CacheModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, RedirectController],
   providers: [AppService],
 })
 export class AppModule {}
